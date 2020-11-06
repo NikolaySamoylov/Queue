@@ -1,33 +1,29 @@
-// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-//
-// sample_matrix.cpp - Copyright (c) Гергель В.П. 07.05.2001
-//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (20.04.2015)
-//
-// Тестирование верхнетреугольной матрицы
-
 #include <iostream>
-#include "utmatrix.h"
-//---------------------------------------------------------------------------
+#include "queue.h"
+
+using namespace std;
 
 int main()
 {
-  TMatrix<int> a(5), b(5), c(5);
-  int i, j;
-
-  setlocale(LC_ALL, "Russian");
-  cout << "Тестирование программ поддержки представления треугольных матриц"
-    << endl;
-  for (i = 0; i < 5; i++)
-    for (j = i; j < 5; j++ )
-    {
-      a[i][j] =  i * 10 + j;
-      b[i][j] = (i * 10 + j) * 100;
-    }
-  c = a + b;
-  cout << "Matrix a = " << endl << a << endl;
-  cout << "Matrix b = " << endl << b << endl;
-  cout << "Matrix c = a + b" << endl << c << endl;
-  
-  return 0;
+	Queue<int> q(4);
+	for (size_t i = 0; i < 4; i++)
+		q[i] = i + 1;
+	cout << q.front() << ' ' << q.back() << endl;
+	q.pop();
+	q.pop();
+	q.pop();
+	cout << endl << q.front() << ' ' << q.back() << endl;
+	q.push(5);
+	q.push(6);
+	q.push(7);
+	cout << endl << q.size() << ' ' << q.capacity() << endl;
+	cout << endl << q.full() << endl;
+	q.push(8);
+	cout << endl << q.front() << ' ' << q.back() << endl;
+	cout << endl << q.empty() << endl;
+	cout << endl;
+	for (size_t i = 0; i < 5; i++)
+		cout << q[i] << endl;
+	cout << endl << q.front() << ' ' << q.back();
+	return 0;
 }
-//---------------------------------------------------------------------------
