@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\include\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\include\queue.h">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{D5F221B4-E049-3802-821F-275E630CCAA0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

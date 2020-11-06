@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\build\CMakeFiles\d43737f0ce380e3a9ec033510ed66d81\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{606EA9CE-97AF-3954-BDE9-08634785C54F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

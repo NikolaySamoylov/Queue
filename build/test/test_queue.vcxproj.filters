@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\test\test_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\test\test_queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\test\test_stack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\test\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{3369D41B-B3BA-319E-A794-D06829D5C745}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

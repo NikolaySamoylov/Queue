@@ -1,0 +1,6 @@
+C:/Users/1/Desktop/Study/2 курс/Алгоритмы и структуры данных/Лабы/Очередь на массиве/Q/Queue/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/1/Desktop/Study/2 курс/Алгоритмы и структуры данных/Лабы/Очередь на массиве/Q/Queue/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/1/Desktop/Study/2 курс/Алгоритмы и структуры данных/Лабы/Очередь на массиве/Q/Queue/build/include/CMakeFiles/queue.dir
+C:/Users/1/Desktop/Study/2 курс/Алгоритмы и структуры данных/Лабы/Очередь на массиве/Q/Queue/build/samples/CMakeFiles/sample_queue.dir
+C:/Users/1/Desktop/Study/2 курс/Алгоритмы и структуры данных/Лабы/Очередь на массиве/Q/Queue/build/gtest/CMakeFiles/gtest.dir
+C:/Users/1/Desktop/Study/2 курс/Алгоритмы и структуры данных/Лабы/Очередь на массиве/Q/Queue/build/test/CMakeFiles/test_queue.dir

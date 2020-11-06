@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\1\Desktop\Study\2 курс\Алгоритмы и структуры данных\Лабы\Очередь на массиве\Q\Queue\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>
