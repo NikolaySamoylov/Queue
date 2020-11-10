@@ -305,14 +305,13 @@ public:
 	{
 		if (vsize + 1 <= MAX_VECTOR_SIZE)
 		{
-			if (Li == data + vcapacity - 1)
+			if (this->full())
 			{
 				size_t ncapacity = 1.3 * vcapacity + 1;
 				size_t Hd = Hi - data;
 				size_t i;
 				size_t counter = 0;
-				if ((Li - Hi + 1) == vcapacity)
-					vcapacity = ncapacity;
+				vcapacity = ncapacity;
 				T* b = new T[vcapacity];
 				for (i = Hd; i < vcapacity; i++)
 					b[counter++] = data[i];
@@ -322,8 +321,10 @@ public:
 				delete[] data;
 				data = b;
 				Hi = data;
-				Li = data + vsize;
+				Li = data + vsize - 1;
 			}
+			if (Li == data + vcapacity - 1)
+				Li == data;
 			else
 				Li++;
 			*Li = Elem;
@@ -358,7 +359,7 @@ public:
 	// проверка очереди на заполненность
 	bool full()
 	{
-		if (vsize == vcapacity)
+		if (((Hi == data) || (Hi == Li + 1)) && (vsize == vcapacity))
 			return true;
 		else
 			return false;
