@@ -254,6 +254,19 @@ public:
 		else
 			return false;
 	}
+
+	//Получение минимального элемента стека
+	T get_min()
+	{
+		Stack<T> min_stack (vsize);
+		T min = *data;
+		min_stack.push(*data);
+		for (size_t i = 1; i < vsize; i++)
+			if (*(data + i) < min)
+				min = *(data + i);
+		min_stack.push(min);
+		return min;
+	}
 };
 
 template <class T>
