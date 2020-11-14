@@ -1,218 +1,416 @@
-﻿// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-//
-// utmatrix.h - Copyright (c) Гергель В.П. 07.05.2001
-//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (21.04.2015)
-//
-// Верхнетреугольная матрица - реализация на основе шаблона вектора
-
-#ifndef __TMATRIX_H__
-#define __TMATRIX_H__
+﻿#pragma once
 
 #include <iostream>
 
-using namespace std;
+const size_t MAX_VECTOR_SIZE = 100000000;
 
-const int MAX_VECTOR_SIZE = 100000000;
-const int MAX_MATRIX_SIZE = 10000;
+template <class T>
 
-// Шаблон вектора
-template <class ValType>
-class TVector
+class Vector
 {
 protected:
-  ValType *pVector;
-  int Size;       // размер вектора
-  int StartIndex; // индекс первого элемента вектора
+	T* data;
+	size_t vsize;
+	size_t vcapacity;
 public:
-  TVector(int s = 10, int si = 0);          // одновременно конструктор по умолчанию
-                                            // и конструктор с параметрами
-  TVector(const TVector &v);                // конструктор копирования
-  ~TVector();
-  int GetSize()      { return Size;       } // размер вектора
-  int GetStartIndex(){ return StartIndex; } // индекс первого элемента
-  ValType& operator[](int pos);             // доступ
-  bool operator==(const TVector &v) const;  // сравнение
-  bool operator!=(const TVector &v) const;  // сравнение
-  TVector& operator=(const TVector &v);     // присваивание
 
-  // скалярные операции
-  TVector  operator+(const ValType &val);   // прибавить скаляр
-  TVector  operator-(const ValType &val);   // вычесть скаляр
-  TVector  operator*(const ValType &val);   // умножить на скаляр
+	// конструктор по умолчанию
+	Vector()
+	{
+		data = NULL;
+		vsize = 0;
+		vcapacity = 0;
+	}
 
-  // векторные операции
-  TVector  operator+(const TVector &v);     // сложение
-  TVector  operator-(const TVector &v);     // вычитание
-  ValType  operator*(const TVector &v);     // скалярное произведение
+	// конструктор с параметром
+	Vector(size_t n)
+	{
+		if ((n >= 0) && (n <= MAX_VECTOR_SIZE))
+		{
+			data = new T[n];
+			vsize = n;
+			vcapacity = n;
+			for (size_t i = 0; i < n; i++)
+				data[i] = 0;
+		}
+		else throw "Incorrect size of vector!";
+	}
 
-  // ввод-вывод
-  friend istream& operator>>(istream &in, TVector &v)
-  {
-    for (int i = 0; i < v.Size; i++)
-      in >> v.pVector[i];
-    return in;
-  }
-  friend ostream& operator<<(ostream &out, const TVector &v)
-  {
-    for (int i = 0; i < v.Size; i++)
-      out << v.pVector[i] << ' ';
-    return out;
-  }
+	// конструктор копирования
+	Vector(const Vector& v)
+	{
+		data = new T[v.vsize];
+		size = v.vsize;
+		vcapacity = v.vcapacity;
+		for (size_t i = 0; i < size; i++)
+			data[i] = v.data[i];
+	}
+
+	// деструктор
+	~Vector()
+	{
+		if (data != NULL)
+		{
+			delete[] data;
+			data = NULL;
+		}
+		vsize = 0;
+		vcapacity = 0;
+	}
+
+	// количество элеметов в векторе
+	size_t size()
+	{
+		return vsize;
+	}
+
+	//  количество элементов, которое может содержать вектор до того, как ему потребуется выделить память
+	size_t capacity()
+	{
+		return vcapacity;
+	}
+
+	// вставка элемента в конец вектора
+	void push_back(const T& Elem)
+	{
+		if (vsize + 1 <= MAX_VECTOR_SIZE)
+		{
+			if (vsize >= vcapacity)
+			{
+				vcapacity = 1.3 * vsize + 1;
+				T* b = new T[vcapacity];
+				for (size_t i = 0; i < vsize; i++)
+					b[i] = data[i];
+				if (data != NULL)
+					delete[] data;
+				data = b;
+			}
+			data[vsize++] = Elem;
+		}
+		else throw "Impossible to push back";
+	}
+
+	// удаление последниего элемента вектора
+	void pop_back()
+	{
+		if (vsize != 0)
+		{
+			vsize--;
+		}
+		else throw "Impossible to pop back!";
+	}
+
+	// вставка элемента в вектор
+	void insert(const T& Elem, const size_t index)
+	{
+		if ((index >= 0) && (index < vsize))
+			if (vsize + 1 > vcapacity)
+			{
+				vcapacity = 1.3 * vsize + 1;
+				T* b = new T[vcapacity];
+				size_t i;
+				for (size_t i = 0; i < index; i++)
+					b[i] = data[i];
+				b[index] = Elem;
+				for (i = index; i < vsize; i++)
+					b[i + 1] = data[i];
+				if (data != NULL)
+					delete[] data;
+				data = b;
+				vsize++;
+			}
+			else
+			{
+				for (size_t i = vsize; i >= index; i--)
+					data[i] = data[i - 1];
+				data[index] = Elem;
+				vsize++;
+			}
+		else throw "Incorrect index!";
+	}
+
+	// удаление элемента вектора
+	void erase(const size_t index)
+	{
+		if ((index >= 0) && (index < vsize))
+		{
+			for (size_t i = index + 1; i < vsize; i++)
+				data[i - 1] = data[i];
+			vsize--;
+		}
+		else throw "Incorrect index!";
+	}
+
+	// вставка элемента в начало вектора
+	void push_front(const T& Elem)
+	{
+		if (vsize + 1 <= MAX_VECTOR_SIZE)
+		{
+			insert(Elem, 0);
+		}
+		else throw "Impossible to push front!";
+	}
+
+	// удаление элемента из начала вектора
+	void pop_front()
+	{
+		if (vsize != 0)
+		{
+			erase(0);
+		}
+		else throw "Impossible to pop front!";
+	}
+
+	// изменение размера вектора на заданную величину
+	void resize(const size_t n)
+	{
+		if (n <= MAX_VECTOR_SIZE)
+		{
+			T* b = new T[n];
+			size_t i;
+			if (n > vsize)
+			{
+				for (i = 0; i < vsize; i++)
+					b[i] = data[i];
+				for (i = vsize; i < n; i++)
+					b[i] = 0;
+			}
+			else
+				for (i = 0; i < n; i++)
+					b[i] = data[i];
+			if (data != NULL)
+				delete[] data;
+			data = b;
+			vsize = n;
+			vcapacity = n;
+		}
+		else throw "Too big size of vector!";
+	}
+
+	// доступ к элементу вектора
+	T& operator[](const size_t index)
+	{
+		if ((index >= 0) && (index < vsize))
+			return data[index];
+		else throw "Incorrect index!";
+	}
+
+	T operator[](const size_t index) const
+	{
+		if ((index >= 0) && (index < vsize))
+			return data[index];
+		else throw "Incorrect index!";
+	}
 };
 
-template <class ValType>
-TVector<ValType>::TVector(int s, int si)
-{
-} /*-------------------------------------------------------------------------*/
+template <class T>
 
-template <class ValType> //конструктор копирования
-TVector<ValType>::TVector(const TVector<ValType> &v)
-{
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType>
-TVector<ValType>::~TVector()
-{
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // доступ
-ValType& TVector<ValType>::operator[](int pos)
-{
-    return pVector[0];
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // сравнение
-bool TVector<ValType>::operator==(const TVector &v) const
-{
-    return false;
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // сравнение
-bool TVector<ValType>::operator!=(const TVector &v) const
-{
-    return false;
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // присваивание
-TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
-{
-    return *this;
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // прибавить скаляр
-TVector<ValType> TVector<ValType>::operator+(const ValType &val)
-{
-    return TVector<ValType>();
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // вычесть скаляр
-TVector<ValType> TVector<ValType>::operator-(const ValType &val)
-{
-    return TVector<ValType>();
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // умножить на скаляр
-TVector<ValType> TVector<ValType>::operator*(const ValType &val)
-{
-    return TVector<ValType>();
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // сложение
-TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
-{
-    return TVector<ValType>();
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // вычитание
-TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
-{
-    return TVector<ValType>();
-} /*-------------------------------------------------------------------------*/
-
-template <class ValType> // скалярное произведение
-ValType TVector<ValType>::operator*(const TVector<ValType> &v)
-{
-    return TVector<ValType>();
-} /*-------------------------------------------------------------------------*/
-
-
-// Верхнетреугольная матрица
-template <class ValType>
-class TMatrix : public TVector<TVector<ValType> >
+class Stack : public Vector<T>
 {
 public:
-  TMatrix(int s = 10);                           
-  TMatrix(const TMatrix &mt);                    // копирование
-  TMatrix(const TVector<TVector<ValType> > &mt); // преобразование типа
-  bool operator==(const TMatrix &mt) const;      // сравнение
-  bool operator!=(const TMatrix &mt) const;      // сравнение
-  TMatrix& operator= (const TMatrix &mt);        // присваивание
-  TMatrix  operator+ (const TMatrix &mt);        // сложение
-  TMatrix  operator- (const TMatrix &mt);        // вычитание
+	// конструктор по умолчанию
+	Stack() : Vector() {};
 
-  // ввод / вывод
-  friend istream& operator>>(istream &in, TMatrix &mt)
-  {
-    for (int i = 0; i < mt.Size; i++)
-      in >> mt.pVector[i];
-    return in;
-  }
-  friend ostream & operator<<( ostream &out, const TMatrix &mt)
-  {
-    for (int i = 0; i < mt.Size; i++)
-      out << mt.pVector[i] << endl;
-    return out;
-  }
+	// конструктор с параметром
+	Stack(size_t n) : Vector(n) {};
+
+	// конструктор копирования
+	Stack(const Stack& s) : Vector(s) {};
+
+	// получение верхнего элемента стека
+	virtual T top()
+	{
+		if (vsize != 0)
+			return data[vsize - 1];
+		else throw "Stack is empty!";
+	}
+
+	// запись в стек
+	virtual void push(const T& Elem)
+	{
+		Vector<T>::push_back(Elem);
+	}
+
+	// удаление из стека
+	virtual void pop()
+	{
+		Vector<T>::pop_back();
+	}
+
+	// проверка стека на пустоту
+	bool empty()
+	{
+		if (vsize == 0)
+			return true;
+		else
+			return false;
+	}
+
+	// проверка стека на заполненность
+	bool full()
+	{
+		if (vsize == vcapacity)
+			return true;
+		else
+			return false;
+	}
 };
 
-template <class ValType>
-TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
+template <class T>
+
+class Queue : public Vector<T>
 {
-    // по умолчанию создается квадратная матрица sхs
-    // надо заменить созданную матрицу верхнетреугольной
-    // вектора должны быть разной длины в матрице
-} /*-------------------------------------------------------------------------*/
+protected:
+	T* Hi;
+	T* Li;
+public:
+	// конструктор по умолчанию
+	Queue() : Vector()
+	{
+		Hi = NULL;
+		Li = NULL;
+	}
 
-template <class ValType> // конструктор копирования
-TMatrix<ValType>::TMatrix(const TMatrix<ValType> &mt):
-  TVector<TVector<ValType> >(mt) {}
+	// конструктор с параметром
+	Queue(size_t n) : Vector(n)
+	{
+		Hi = data;
+		Li = data + vsize - 1;
+	}
 
-template <class ValType> // конструктор преобразования типа
-TMatrix<ValType>::TMatrix(const TVector<TVector<ValType> > &mt):
-  TVector<TVector<ValType> >(mt) {}
+	// конструктор копирования
+	Queue(const Queue& q) : Vector(q)
+	{
+		Hi = s.Hi;
+		Li = s.Li;
+	}
 
-template <class ValType> // сравнение
-bool TMatrix<ValType>::operator==(const TMatrix<ValType> &mt) const
+	// получение первого элемента очереди
+	T front()
+	{
+		if (vsize != 0)
+			return *Hi;
+		else throw "Queue is empty!";
+	}
+	// получение последнего элемента очереди
+	T back()
+	{
+		if (vsize != 0)
+			return *Li;
+		else throw "Queue is empty!";
+	}
+
+	// добавление элемента в конец очереди
+	void push(const T& Elem)
+	{
+		if (vsize + 1 <= MAX_VECTOR_SIZE)
+		{
+			if (this->full())
+			{
+				size_t ncapacity = 1.3 * vcapacity + 1;
+				size_t Hd = Hi - data;
+				size_t i;
+				size_t counter = 0;
+				vcapacity = ncapacity;
+				T* b = new T[vcapacity];
+				for (i = Hd; i < vcapacity; i++)
+					b[counter++] = data[i];
+				if (Hi != data)
+					for (i = 0; i < Hd; i++)
+						b[counter++] = data[i];
+				delete[] data;
+				data = b;
+				Hi = data;
+				Li = data + vsize - 1;
+			}
+			if (Li == data + vcapacity - 1)
+				Li == data;
+			else
+				Li++;
+			*Li = Elem;
+			vsize++;
+		}
+		else throw "The memory is end!";
+	}
+
+	// извлечение элемента из начала очереди
+	void pop()
+	{
+		if (vsize != 0)
+		{
+			if (Hi == data + vcapacity - 1)
+				Hi = data;
+			else
+				Hi++;
+			vsize--;
+		}
+		else throw "Queue is empty!";
+	}
+
+	// проверка очереди на пустоту
+	bool empty()
+	{
+		if (vsize == 0)
+			return true;
+		else
+			return false;
+	}
+
+	// проверка очереди на заполненность
+	bool full()
+	{
+		if (((Hi == data) || (Hi == Li + 1)) && (vsize == vcapacity))
+			return true;
+		else
+			return false;
+	}
+};
+
+template <class T>
+
+class Stack_with_min : public Stack<T>
 {
-    return false;
-} /*-------------------------------------------------------------------------*/
+private:
+	Stack<T> min_stack;
+public:
+	// конструктор по умолчанию
+	Stack_with_min() : Stack()
+	{
+		min_stack.Stack::Stack();
+	}
 
-template <class ValType> // сравнение
-bool TMatrix<ValType>::operator!=(const TMatrix<ValType> &mt) const
-{
-    return false;
-} /*-------------------------------------------------------------------------*/
+	// конструктор с параметром
+	Stack_with_min(size_t n) : Stack(n)
+	{
+		min_stack.Stack::Stack(n);
+	};
 
-template <class ValType> // присваивание
-TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
-{
-    return *this;
-} /*-------------------------------------------------------------------------*/
+	// конструктор копирования
+	Stack_with_min(const Stack_with_min& s) : Stack(s)
+	{
+		min_stack.Stack::Stack(s.min_stack);
+	};
 
-template <class ValType> // сложение
-TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
-{
-    // благодаря наследованию от TVector<TVector<ValType> > operator+
-    // уже есть, надо только его вызвать
-    return TMatrix<ValType>();
-} /*-------------------------------------------------------------------------*/
+	// запись в стек с учётом текущего минимального элемента
+	void push(T Elem)
+	{
+		if (Stack::empty() || Elem < min_stack.top())
+			min_stack.push(Elem);
+		else
+			min_stack.push(min_stack.top());
+		Stack::push(Elem);
+	}
 
-template <class ValType> // вычитание
-TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
-{
-    return TMatrix<ValType>();
-} /*--------------------------------------------------s-----------------------*/
+	// удаление из стека с учётом текущего минимального элемента
+	void pop()
+	{
+		min_stack.pop();
+		Stack::pop();
+	}
 
-// TVector О3 Л2 П4 С6
-// TMatrix О2 Л2 П3 С3
-#endif
+	// получение минимального элемента стека
+	T get_min()
+	{
+		return min_stack.top();
+	}
+};

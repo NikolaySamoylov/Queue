@@ -1,163 +1,124 @@
-#include "utmatrix.h"
-
+#include "queue.h"
 #include <gtest.h>
 
-TEST(TVector, can_create_vector_with_positive_length)
+TEST(Queue, can_create_queue_with_positive_size)
 {
-  ASSERT_NO_THROW(TVector<int> v(5));
+    ASSERT_NO_THROW(Queue<int> q(3));
 }
 
-TEST(TVector, cant_create_too_large_vector)
+TEST(Queue, cant_create_queue_with_too_large_size)
 {
-  ASSERT_ANY_THROW(TVector<int> v(MAX_VECTOR_SIZE + 1));
+    ASSERT_ANY_THROW(Queue<int> q(MAX_VECTOR_SIZE + 1));
 }
 
-TEST(TVector, can_create_vector_with_max_size)
+TEST(Queue, cant_create_queue_with_negative_size)
 {
-    ASSERT_NO_THROW(TVector<int> v(MAX_VECTOR_SIZE));
+    ASSERT_ANY_THROW(Queue<int> q(-3));
 }
 
-TEST(TVector, can_create_vector_with_zero_size)
+TEST(Queue, can_get_size)
 {
-    ASSERT_NO_THROW(TVector<int> v(0));
+    Queue<int> q(3);
+
+    EXPECT_EQ(3, q.size());
 }
 
-TEST(TVector, throws_when_create_vector_with_negative_length)
+TEST(Queue, can_get_front)
 {
-  ASSERT_ANY_THROW(TVector<int> v(-5));
+    Queue<int> q(3);
+    q[0] = 1; q[1] = 2; q[2] = 3;
+
+    EXPECT_EQ(1, q.front());
 }
 
-TEST(TVector, throws_when_create_vector_with_negative_startindex)
+TEST(Queue, cant_get_front_of_empty_queue)
 {
-  ASSERT_ANY_THROW(TVector<int> v(5, -2));
+    Queue<int> q(0);
+
+    ASSERT_ANY_THROW(q.front());
 }
 
-TEST(TVector, can_create_copied_vector)
+TEST(Queue, can_get_back)
 {
-  TVector<int> v(10);
+    Queue<int> q(3);
+    q[0] = 1; q[1] = 2; q[2] = 3;
 
-  ASSERT_NO_THROW(TVector<int> v1(v));
+    EXPECT_EQ(3, q.back());
 }
 
-TEST(TVector, copied_vector_is_equal_to_source_one)
+TEST(Queue, cant_get_back_of_empty_queue)
 {
-  ADD_FAILURE();
+    Queue<int> q(0);
+
+    ASSERT_ANY_THROW(q.back());
 }
 
-TEST(TVector, copied_vector_has_its_own_memory)
+TEST(Queue, can_push_element_with_repacking)
 {
-  ADD_FAILURE();
+    Queue<int> q(3);
+    q[0] = 1; q[1] = 2; q[2] = 3;
+
+    ASSERT_NO_THROW(q.push(4));
 }
 
-TEST(TVector, can_get_size)
+TEST(Queue, can_push_element_without_repacking)
 {
-  TVector<int> v(4);
+    Queue<int> q(3);
+    q[0] = 1; q[1] = 2; q[2] = 3;
+    q.pop();
 
-  EXPECT_EQ(4, v.GetSize());
+    ASSERT_NO_THROW(q.push(4));
 }
 
-TEST(TVector, can_get_start_index)
+TEST(Queue, cant_push_element_when_the_memory_is_end)
 {
-  TVector<int> v(4, 2);
+    Queue<int> q(MAX_VECTOR_SIZE);
 
-  EXPECT_EQ(2, v.GetStartIndex());
+    ASSERT_ANY_THROW(q.push(4));
 }
 
-TEST(TVector, can_set_and_get_element)
+TEST(Queue, can_pop_element)
 {
-  TVector<int> v(4);
-  v[0] = 4;
+    Queue<int> q(3);
+    q[0] = 1; q[1] = 2; q[2] = 3;
 
-  EXPECT_EQ(4, v[0]);
+    ASSERT_NO_THROW(q.pop());
 }
 
-TEST(TVector, throws_when_set_element_with_negative_index)
+TEST(Queue, cant_pop_element_when_queue_is_empty)
 {
-  ADD_FAILURE();
+    Queue<int> q(0);
+
+    ASSERT_ANY_THROW(q.pop());
 }
 
-TEST(TVector, throws_when_set_element_with_too_large_index)
+TEST(Queue, queue_is_empty)
 {
-  ADD_FAILURE();
+    Queue<int> q(0);
+
+    EXPECT_EQ(true, q.empty());
 }
 
-TEST(TVector, can_assign_vector_to_itself)
+TEST(Queue, queue_is_not_empty)
 {
-  ADD_FAILURE();
+    Queue<int> q(3);
+
+    EXPECT_EQ(false, q.empty());
 }
 
-TEST(TVector, can_assign_vectors_of_equal_size)
+TEST(Queue, queue_is_full)
 {
-  ADD_FAILURE();
+    Queue<int> q(3);
+    q[0] = 1; q[1] = 2; q[2] = 3;
+
+    EXPECT_EQ(true, q.full());
 }
 
-TEST(TVector, assign_operator_change_vector_size)
+TEST(Queue, queue_is_not_full)
 {
-  ADD_FAILURE();
-}
+    Queue<int> q(4);
+    q[0] = 1; q[1] = 2; q[2] = 3; q[3] = 4;
+    q.push(5);
 
-TEST(TVector, can_assign_vectors_of_different_size)
-{
-  ADD_FAILURE();
+    EXPECT_EQ(false, q.full());
 }
-
-TEST(TVector, compare_equal_vectors_return_true)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, compare_vector_with_itself_return_true)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, vectors_with_different_size_are_not_equal)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, can_add_scalar_to_vector)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, can_subtract_scalar_from_vector)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, can_multiply_scalar_by_vector)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, can_add_vectors_with_equal_size)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, cant_add_vectors_with_not_equal_size)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, can_subtract_vectors_with_equal_size)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, cant_subtract_vectors_with_not_equal_size)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, can_multiply_vectors_with_equal_size)
-{
-  ADD_FAILURE();
-}
-
-TEST(TVector, cant_multiply_vectors_with_not_equal_size)
-{
-  ADD_FAILURE();
-}
-
