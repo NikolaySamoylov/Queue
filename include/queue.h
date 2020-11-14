@@ -254,19 +254,6 @@ public:
 		else
 			return false;
 	}
-
-	//Получение минимального элемента стека
-	T get_min()
-	{
-		Stack<T> min_stack (vsize);
-		T min = *data;
-		min_stack.push(*data);
-		for (size_t i = 1; i < vsize; i++)
-			if (*(data + i) < min)
-				min = *(data + i);
-		min_stack.push(min);
-		return min;
-	}
 };
 
 template <class T>
@@ -376,5 +363,54 @@ public:
 			return true;
 		else
 			return false;
+	}
+};
+
+template <class T>
+
+class Stack_with_min : public Stack<T>
+{
+private:
+	Stack<T> min_stack;
+public:
+	// конструктор по умолчанию
+	Stack_with_min() : Stack()
+	{
+		min_stack.Stack::Stack();
+	}
+
+	// конструктор с параметром
+	Stack_with_min(size_t n) : Stack(n)
+	{
+		min_stack.Stack::Stack(n);
+	};
+
+	// конструктор копирования
+	Stack_with_min(const Stack_with_min& s) : Stack(s)
+	{
+		min_stack.Stack::Stack(s.min_stack);
+	};
+
+	// запись в стек с учётом текущего минимального элемента
+	void push(T Elem)
+	{
+		if (Stack::empty() || Elem < min_stack.top())
+			min_stack.push(Elem);
+		else
+			min_stack.push(min_stack.top());
+		Stack::push(Elem);
+	}
+
+	// удаление из стека с учётом текущего минимального элемента
+	void pop()
+	{
+		min_stack.pop();
+		Stack::pop();
+	}
+
+	// получение минимального элемента стека
+	T get_min()
+	{
+		return min_stack.top();
 	}
 };

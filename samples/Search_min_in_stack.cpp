@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-	Stack<int> s(0);
+	Stack_with_min<int> s(0);
 	s.push(3); s.push(7); s.push(9); s.push(-7); s.push(10);
 	for (size_t i = 0; i < 5; i++)
 		cout << s[i] << '\t';
